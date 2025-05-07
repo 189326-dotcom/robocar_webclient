@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, height=device-height" />
+    <script src="js/websocket.js"></script>
+    <script src="js/joystick.js" defer></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="title">websocket client for microcontroller</div>
+
+      <!-- Connect -->
+      <div class="connect_container">
+        <label class="label">Connect to:</label>
+        <div class="input-group">
+          <input type="text" placeholder="IP of microcontroller" id="ip" />
+          <input type="text" placeholder="Port" id="port" style="width: 40px" />
+          <button type="button" onclick="connect()">Connect</button>
+        </div>
+
+        <div class="v-space"></div>
+
+        <!-- Test Message -->
+        <label class="label">Test Message:</label>
+        <div class="input-group">
+          <input type="text" placeholder="Message" id="test-message" />
+          <button type="button" onclick="sendTestMessage()">Send</button>
+        </div>
+      </div>
+      <!-- Joystick -->
+
+      <div id="js_container">
+        <div id="js-base">
+          <img src="images/joystick-base.png" />
+        </div>
+        <div id="js_stick">
+          <img src="images/joystick-red.png" />
+        </div>
+        <div id="js_status"></div>
+      </div>
+    </div>
+
+    <script>
+      function jsUpdate(value) {
+        if (connection) {
+          connection.send(value.x + "," + value.y);
+        }
+        const distance = Math.sqrt(value.x * value.x + value.y * value.y);
+        console.log("x: " + Math.round(value.x) + " y: " + Math.round(value.y) + " d: " + distance);
+      }
+
+      window.addEventListener("load", function () {
+        if (joystick) {
+          joystick.onUpdate = jsUpdate;
+        }
+      });
+    </script>
+  </body>
+</html>
